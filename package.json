@@ -1,0 +1,55 @@
+{
+  "name": "@prrbizdev/postcards-to-my-younger-self",
+  "version": "1.0.0",
+  "description": "Custom CSS and JavaScript for Webflow site served via jsDelivr CDN",
+  "main": "js/animations.js",
+  "scripts": {
+    "build": "npm run minify-css && npm run minify-js",
+    "minify-css": "cleancss -o css/styles.min.css css/styles.css",
+    "minify-js": "npm run minify-animations && npm run minify-splide",
+    "minify-animations": "terser js/animations.js -o js/animations.min.js -c -m",
+    "minify-splide": "terser js/splide-video.js -o js/splide-video.min.js -c -m",
+    "watch": "npm-watch",
+    "serve": "http-server . -p 8080",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "watch": {
+    "build": {
+      "patterns": ["css", "js"],
+      "extensions": "css,js",
+      "ignore": "*.min.*"
+    }
+  },
+  "devDependencies": {
+    "clean-css-cli": "^5.6.2",
+    "terser": "^5.19.2",
+    "npm-watch": "^0.11.0",
+    "http-server": "^14.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prrbizdev/postcards-to-my-younger-self.git"
+  },
+  "keywords": [
+    "webflow",
+    "custom",
+    "css",
+    "javascript",
+    "animations",
+    "gsap",
+    "splide",
+    "carousel"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/prrbizdev/postcards-to-my-younger-self/issues"
+  },
+  "homepage": "https://github.com/prrbizdev/postcards-to-my-younger-self#readme",
+  "jsdelivr": {
+    "css": "css/styles.min.css",
+    "js": [
+      "js/animations.min.js",
+      "js/splide-video.min.js"    ]
+  }
+}
