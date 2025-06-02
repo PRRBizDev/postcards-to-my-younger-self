@@ -1,10 +1,7 @@
 // Immediately hide elements to prevent flash
-gsap.set('.reveal, .scale-in, .stagger-children > *', {
+gsap.set('.reveal, .stagger-children > *', {
   opacity: 0,
   y: 25
-});
-gsap.set('.scale-in', {
-  scale: 0.95
 });
 gsap.set('.stagger-children > *', {
   y: 20
@@ -19,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if (prefersReducedMotion) {
     // Show all elements immediately if user prefers reduced motion
-    gsap.set('.reveal, .fade-up, .scale-in, .slide-left, .slide-right, .stagger-children > *', {
+    gsap.set('.reveal, .fade-up, .slide-left, .slide-right, .stagger-children > *', {
       opacity: 1,
       y: 0,
       x: 0,
@@ -72,50 +69,6 @@ document.addEventListener('DOMContentLoaded', function() {
           scrollTrigger: {
             trigger: element,
             start: 'top 80%',
-            toggleActions: 'play none none none',
-            once: true // Ensures animation only plays once
-          }
-        }
-      );
-    }
-  });
-
-
-  // Professional scale-in animation (for buttons/CTAs)
-  gsap.utils.toArray('.scale-in').forEach((element) => {
-    const rect = element.getBoundingClientRect();
-    const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
-
-    if (isInViewport) {
-      // Animate immediately if in viewport
-      gsap.fromTo(element,
-        {
-          scale: 0.95,
-          opacity: 0
-        },
-        {
-          scale: 1,
-          opacity: 1,
-          duration: 0.35,
-          ease: 'back.out(1.2)',
-          delay: 0.2
-        }
-      );
-    } else if (isBelowFold(element)) {
-      // Elements already hidden by initial gsap.set
-      gsap.fromTo(element,
-        {
-          scale: 0.95,
-          opacity: 0
-        },
-        {
-          scale: 1,
-          opacity: 1,
-          duration: 0.35,
-          ease: 'back.out(1.2)',
-          scrollTrigger: {
-            trigger: element,
-            start: 'top 78%',
             toggleActions: 'play none none none',
             once: true // Ensures animation only plays once
           }
