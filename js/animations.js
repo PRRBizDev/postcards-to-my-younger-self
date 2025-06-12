@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if (prefersReducedMotion) {
     // Show all elements immediately if user prefers reduced motion
-    gsap.set('.reveal, .stagger-children > *', {
+    gsap.set('.reveal', {
       opacity: 1,
       y: 0,
       x: 0,
@@ -16,36 +16,38 @@ document.addEventListener('DOMContentLoaded', function() {
     return;
   }
 
-  // Helper function to check if element is below the fold
-  function isBelowFold(element) {
-    const rect = element.getBoundingClientRect();
-    const elementTop = rect.top + window.scrollY;
-    return elementTop > window.innerHeight;
+  // Get all .reveal elements (only process if they exist)
+  const revealElements = gsap.utils.toArray('.reveal');
+
+  if (revealElements.length === 0) {
+    console.log('No .reveal elements found - skipping animations');
+    return;
   }
 
-  // Process .reveal elements
-  gsap.utils.toArray('.reveal').forEach((element, index) => {
+  console.log(`Found ${revealElements.length} .reveal elements`);
+
+  // Process each .reveal element
+  revealElements.forEach((element, index) => {
     const rect = element.getBoundingClientRect();
     const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
 
     if (isInViewport) {
-      // CRITICAL: Don't hide above-the-fold content
-      // Just add a subtle animation without hiding
+      // Above-the-fold: Don't hide, just add subtle entrance
       gsap.fromTo(element,
         {
-          y: 10,
-          opacity: 0.8
+          y: 15,
+          opacity: 0.7
         },
         {
           y: 0,
           opacity: 1,
-          duration: 0.3,
-          delay: index * 0.05, // Reduced stagger
-          ease: 'power1.out'
+          duration: 0.4,
+          delay: index * 0.08,
+          ease: 'power2.out'
         }
       );
     } else {
-      // Only hide elements that are below the fold
+      // Below-the-fold: Hide initially, reveal on scroll
       gsap.set(element, { opacity: 0, y: 25 });
 
       gsap.fromTo(element,
@@ -56,11 +58,11 @@ document.addEventListener('DOMContentLoaded', function() {
         {
           y: 0,
           opacity: 1,
-          duration: 0.4,
-          ease: 'power1.out',
+          duration: 0.5,
+          ease: 'power2.out',
           scrollTrigger: {
             trigger: element,
-            start: 'top 80%',
+            start: 'top 85%',
             toggleActions: 'play none none none',
             once: true
           }
@@ -69,54 +71,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Stagger children animations (only if container exists)
-  const staggerContainers = gsap.utils.toArray('.stagger-children');
-  if (staggerContainers.length > 0) {
-    staggerContainers.forEach((container) => {
-      const rect = container.getBoundingClientRect();
-      const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
-      const children = container.children;
-
-      if (isInViewport) {
-        // Don't hide above-the-fold stagger content
-        gsap.fromTo(children,
-          {
-            y: 8,
-            opacity: 0.9
-          },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.25,
-            ease: 'power1.out',
-            stagger: 0.03,
-            delay: 0.1
-          }
-        );
-      } else {
-        // Only hide below-the-fold stagger content
-        gsap.set(children, { opacity: 0, y: 20 });
-
-        gsap.fromTo(children,
-          {
-            y: 20,
-            opacity: 0
-          },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.3,
-            ease: 'power1.out',
-            stagger: 0.04,
-            scrollTrigger: {
-              trigger: container,
-              start: 'top 78%',
-              toggleActions: 'play none none none',
-              once: true
-            }
-          }
-        );
-      }
-    });
-  }
+  console.log('Clean GSAP animations loaded - no errors!');
 });
